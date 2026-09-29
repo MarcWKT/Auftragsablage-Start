@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auftragsablage starten</title>
+<link rel="icon" href="logo-weisstechnik.png">
+<meta name="robots" content="noindex">
+<style>
+/* ----------------------------------------------------------------------------
+   Auftragsablage - Startseite fuer den SharePoint-Link
+
+   Die Farben und Abstaende sind aus der Anwendung uebernommen, damit der Uebergang
+   nicht auffaellt. Alles steht in dieser einen Datei: In der Firmenumgebung ist
+   nicht gesagt, dass eine Seite von GitHub Pages Schriften oder Skripte von
+   anderen Adressen nachladen darf.
+   ---------------------------------------------------------------------------- */
+:root {
+  --tinte:        #00204E;
+  --tinte-hell:   #0b3a72;
+  --tinte-matt:   #335076;
+  --signal:       #9AA302;
+  --signal-tief:  #5F6B00;
+  --papier:       #ffffff;
+  --raster:       #eef1f4;
+  --raster-tief:  #e3e8ed;
+  --linie:        #d3dae1;
+  --linie-stark:  #a8b4c0;
+  --graphit:      #16202b;
+  --graphit-matt: #55636f;
+  --gelb:         #8a5a00;
+  --gelb-flaeche: #fdf4e3;
+  --blau:         #1d4f8f;
+  --blau-flaeche: #e9f0f9;
+  --schrift: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --kante: 2px;
+}
+
+* { box-sizing: border-box; }
+
+/* Die Vorgabe des Browsers fuer [hidden] ist display:none - eine eigene
+   display-Angabe in einer Klassenregel schlaegt sie jedoch. Genau das war hier
+   der Fall: Die Laufanzeige ist inline-flex und blieb trotz hidden stehen. */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: var(--schrift);
+  color: var(--graphit);
+  background: var(--raster);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Kopf ------------------------------------------------------------------ */
+.kopf {
+  /* Dunkler Grund wie in der Anwendung: Das Logo ist weiss und waere auf
+     hellem Grund unsichtbar. */
+  background: var(--tinte);
+  border-bottom: 3px solid var(--signal);
+}
+.kopf-inhalt {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.marke-logo { height: 2.5rem; width: auto; display: block; }
+.marke-trenner {
+  width: 1px;
+  height: 2rem;
+  flex: none;
+  background: rgba(255, 255, 255, .26);
+}
+.marke-titel {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: #fff;
+}
+.marke-unter {
+  margin: .0625rem 0 0;
+  font-size: .8125rem;
+  color: rgba(255, 255, 255, .68);
+}
+
+/* --- Karte ----------------------------------------------------------------- */
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3rem;
+}
+.karte {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-top: var(--kante) solid var(--tinte);
+  padding: 2.25rem 2rem;
+  text-align: center;
+}
+h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tinte);
+  letter-spacing: -.01em;
+}
+.unterzeile {
+  margin: 0 auto 1.75rem;
+  max-width: 30rem;
+  color: var(--graphit-matt);
+  font-size: .9375rem;
+}
+
+/* --- Laufanzeige ----------------------------------------------------------- */
+.lauf {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  margin-bottom: 1.5rem;
+  color: var(--tinte-matt);
+  font-size: .875rem;
+}
+.kreisel {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--raster-tief);
+  border-top-color: var(--tinte);
+  border-radius: 50%;
+  animation: dreh .8s linear infinite;
+  flex: none;
+}
+@keyframes dreh { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .kreisel { animation-duration: 2.4s; }
+}
+
+/* --- Knopf ----------------------------------------------------------------- */
+.knopf {
+  display: inline-block;
+  padding: .75rem 1.75rem;
+  background: var(--tinte);
+  color: var(--papier);
+  border: var(--kante) solid var(--tinte);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.knopf:hover  { background: var(--tinte-hell); border-color: var(--tinte-hell); }
+.knopf:active { transform: translateY(1px); }
+.knopf:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+
+.nachsatz {
+  margin: 1.25rem 0 0;
+  font-size: .8125rem;
+  color: var(--graphit-matt);
+}
+
+/* --- Probeansicht ---------------------------------------------------------- */
+/* Deutlich abgesetzt: Wer hier landet, soll nicht glauben, das sei der echte
+   Zustand seines Rechners. */
+.probeband {
+  margin: 0 0 1.75rem;
+  padding: .75rem 1rem;
+  background: var(--gelb-flaeche);
+  border-left: 3px solid var(--gelb);
+  font-size: .875rem;
+  text-align: left;
+}
+.probeband a { color: var(--tinte); }
+
+/* --- Erfolg ---------------------------------------------------------------- */
+.erfolg-haken {
+  margin: 0 0 1.5rem;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--signal-tief);
+}
+
+kbd {
+  font-family: var(--schrift);
+  font-size: .8125rem;
+  padding: .0625rem .375rem;
+  background: var(--papier);
+  border: 1px solid var(--linie-stark, var(--linie));
+  border-bottom-width: 2px;
+  color: var(--graphit);
+}
+
+/* --- Hilfe ----------------------------------------------------------------- */
+/* Erscheint erst, wenn sich nach ein paar Sekunden nichts geruehrt hat. Ob der
+   Start wirklich fehlgeschlagen ist, kann eine Webseite nicht sicher feststellen -
+   deshalb steht hier eine Frage und keine Fehlermeldung. */
+.hilfe {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--linie);
+  text-align: left;
+}
+.hilfe[hidden] { display: none; }
+.hilfe h3 {
+  margin: 0 0 .5rem;
+  font-size: 1rem;
+  color: var(--tinte);
+}
+/* Sagt, woran die Seite den Fehlschlag erkannt hat - das trennt die beiden
+   Ursachen, die sonst gleich aussehen: gar nicht eingerichtet oder abgebrochen. */
+.hilfegrund {
+  margin: 0 0 1.25rem;
+  font-size: .9375rem;
+  color: var(--graphit-matt);
+}
+.hilfegrund:empty { display: none; }
+.schritte {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: schritt;
+}
+.schritte li {
+  counter-increment: schritt;
+  position: relative;
+  padding-left: 2.25rem;
+  margin-bottom: 1rem;
+  font-size: .9375rem;
+}
+.schritte li::before {
+  content: counter(schritt);
+  position: absolute;
+  left: 0;
+  top: .0625rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  background: var(--raster);
+  border: 1px solid var(--linie);
+  color: var(--tinte);
+  font-size: .8125rem;
+  font-weight: 700;
+}
+.schritte strong { color: var(--graphit); }
+code {
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: .875em;
+  background: var(--raster);
+  border: 1px solid var(--linie);
+  padding: .0625rem .3125rem;
+}
+
+.einzelpunkt-text { margin: 0 0 1rem; font-size: .9375rem; }
+.bezugsquelle { margin: 0; font-size: .9375rem; }
+.bezug { display: block; margin-top: .25rem; }
+
+.merker {
+  margin-top: 1.25rem;
+  padding: .875rem 1rem;
+  background: var(--blau-flaeche);
+  border-left: 3px solid var(--blau);
+  font-size: .875rem;
+  color: var(--graphit);
+}
+.merker--warnung {
+  background: var(--gelb-flaeche);
+  border-left-color: var(--gelb);
+}
+
+footer {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 2.5rem;
+  font-size: .8125rem;
+  color: var(--graphit-matt);
+  text-align: center;
+}
+
+@media (max-width: 34rem) {
+  .karte { padding: 1.75rem 1.25rem; }
+  .kopf-inhalt { padding: 1rem; gap: .75rem; }
+  .marke-trenner { display: none; }
+  .marke-logo { height: 1.9rem; }
+  .marke-titel { font-size: .9375rem; }
+  h2 { font-size: 1.25rem; }
+  .knopf { display: block; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="kopf-inhalt">
+    <img class="marke-logo" src="logo-weisstechnik.png" alt="Weiss Technik">
+    <span class="marke-trenner" aria-hidden="true"></span>
+    <div>
+      <h1 class="marke-titel">Auftragsablage WKT Air Solutions</h1>
+      <p class="marke-unter">Dokumentupload, Analyse und SharePoint-Ablage in einem Vorgang</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="karte">
+    <p class="probeband" id="probeband" hidden>
+      <strong>Probeansicht.</strong>
+      <span id="probetext"></span>
+      Es wurde nichts gestartet.
+      <a href="./">Zur normalen Seite</a>
+    </p>
+
+    <h2 id="titel">Auftragsablage wird gestartet …</h2>
+    <p class="unterzeile" id="unterzeile">
+      Ihr Browser fragt gleich, ob er die Anwendung öffnen darf. Bitte bestätigen –
+      danach läuft die Auftragsablage in einem eigenen Fenster.
+    </p>
+
+    <p class="lauf" id="lauf">
+      <span class="kreisel" aria-hidden="true"></span>
+      <span id="laufText">Start wird ausgelöst …</span>
+    </p>
+
+    <p>
+      <a class="knopf" id="knopf" href="auftragsablage://start">Auftragsablage starten</a>
+    </p>
+
+    <p class="nachsatz" id="nachsatz">
+      Passiert nichts? Dann klicken Sie den Knopf noch einmal an.
+    </p>
+
+    <section class="erfolg" id="erfolg" hidden>
+      <p class="erfolg-haken" aria-hidden="true">&#10003;</p>
+      <p>
+        <button class="knopf" type="button" id="schliessknopf">Dieses Fenster schließen</button>
+      </p>
+      <p class="nachsatz" id="schliesshinweis" hidden>
+        Diesen Tab können Sie jetzt schließen – am schnellsten mit
+        <kbd>Strg</kbd> + <kbd>W</kbd>.
+      </p>
+    </section>
+
+    <section class="hilfe" id="hilfe" hidden>
+      <h3>Es tut sich nichts?</h3>
+      <p class="hilfegrund" id="hilfegrund"></p>
+
+      <!-- Fehlt die Anwendung, gibt es genau eine Sache zu tun. Weitere Punkte
+           daneben lenken nur davon ab. -->
+      <div class="einzelpunkt" id="hilfeFehlt" hidden>
+        <p class="einzelpunkt-text">
+          <strong>Auftragsablage herunterladen und öffnen.</strong>
+          Unten auf den Link zum Herunterladen drücken, dann oben im Browser auf den
+          Download-Knopf und die Datei öffnen. Danach funktioniert dieser Link dauerhaft.
+        </p>
+        <p class="bezugsquelle" id="bezugsquelle">
+          Sie finden die Datei in SharePoint neben diesem Link.
+        </p>
+        <div class="bezug" id="bezug" hidden>
+          <a class="knopf" id="bezugknopf" href="#" target="_blank" rel="noopener">
+            Auftragsablage herunterladen
+          </a>
+        </div>
+      </div>
+
+      <!-- Die Anwendung ist da, meldet sich aber nicht. Herunterladen hilft hier
+           nicht weiter - diese drei Punkte schon. -->
+      <ol class="schritte" id="hilfeStumm" hidden>
+        <li>
+          <strong>Nachfrage des Browsers bestätigen.</strong>
+          Beim ersten Mal erscheint ein kleines Fenster mit der Frage
+          „Auftragsablage öffnen?“. Erst wenn Sie das bestätigen, startet die Anwendung.
+        </li>
+        <li>
+          <strong>Andere Browserfenster ansehen.</strong>
+          Die Auftragsablage öffnet sich in Ihrem Standardbrowser – das muss nicht
+          derselbe sein, in dem Sie gerade lesen.
+        </li>
+        <li>
+          <strong>Noch einmal versuchen.</strong>
+          Ein Klick auf den Knopf oben startet den Vorgang von vorn.
+        </li>
+      </ol>
+
+      <p class="merker">
+        Der Link öffnet die Anwendung auf <strong>Ihrem eigenen Rechner</strong> –
+        er lädt nichts aus dem Internet. Deshalb muss die Auftragsablage dort einmal
+        eingerichtet worden sein.
+      </p>
+    </section>
+
+    <section class="hilfe" id="rahmenhinweis" hidden>
+      <h3>In diesem Fenster geht es nicht weiter</h3>
+      <p class="merker merker--warnung" style="margin-top:0">
+        Die Seite ist gerade in SharePoint eingebettet. Anwendungen lassen sich von dort
+        aus nicht starten. Bitte öffnen Sie die Seite in einem eigenen Tab:
+      </p>
+      <p style="text-align:center">
+        <a class="knopf" id="rahmenknopf" href="#" target="_blank" rel="noopener">
+          In neuem Tab öffnen
+        </a>
+      </p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Auftragsablage WKT Air Solutions · Air Solutions AV
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // ==========================================================================
+  //  HIER EINTRAGEN: Wo liegt die Auftragsablage.cmd?
+  //
+  //  Leer lassen, und die Seite verweist nur allgemein auf SharePoint. Steht hier
+  //  eine Adresse, erscheint in der Anleitung ein Knopf zum Herunterladen.
+  //
+  //  Aus SharePoint fuehren zwei Wege zu einer solchen Adresse:
+  //
+  //    1. Freigabelink der Datei kopieren und '&download=1' anhaengen. Ohne diesen
+  //       Zusatz oeffnet sich erst die SharePoint-Ansicht statt des Downloads.
+  //       https://<tenant>.sharepoint.com/:u:/s/<Site>/<Kennung>?e=<...>&download=1
+  //
+  //    2. Oder unmittelbar ueber die Downloadadresse der Bibliothek:
+  //       https://<tenant>.sharepoint.com/sites/<Site>/_layouts/15/download.aspx
+  //         ?SourceUrl=/sites/<Site>/<Bibliothek>/Auftragsablage.cmd
+  //
+  //  Beides setzt voraus, dass der Benutzer an SharePoint angemeldet ist - im
+  //  Haus ist er das ueblicherweise. Wer keinen Zugriff hat, bekommt die Datei
+  //  auch nicht; das ist so gewollt.
+  // ==========================================================================
+  var DOWNLOAD = 'https://sgxs.sharepoint.com/sites/mts0344/_layouts/15/download.aspx?SourceUrl=/sites/mts0344/Auftraege/_Anwendung/Auftragsablage.cmd';
+
+  // Fuer dieses Schema gibt es nur die eine Aktion. Die Adresse wird beim Start
+  // ohnehin nicht weitergereicht - so kann eine Webseite der Anwendung keine
+  // zusaetzlichen Befehle unterschieben.
+  var ZIEL = 'auftragsablage://start';
+
+  // --- Fristen --------------------------------------------------------------
+  // Sie folgen dem, was beim Start tatsaechlich geschieht:
+  //
+  //   1. Die Seite ruft das Schema auf.
+  //   2. Der Browser fragt nach       -> die Seite verliert den Fokus.
+  //   3. Der Benutzer bestaetigt      -> der Fokus kommt sofort zurueck.
+  //   4. cmd.exe, PowerShell, Auspacken, Abgleich mit dem Ablageordner,
+  //      Webserver starten            -> das dauert Sekunden bis Minuten.
+  //   5. Die Anwendung oeffnet ihren eigenen Browsertab.
+  //
+  // Schritt 3 sah frueher aus wie ein Abbruch, und nach drei Sekunden stand die
+  // Fehlersuche da, waehrend der Start noch lief. Der Fokus taugt darum nicht als
+  // Erfolgsmerkmal - wohl aber die Nachfrage aus Schritt 2: Die kommt nur, wenn
+  // Windows das Schema kennt.
+  var FRIST_OHNE_NACHFRAGE = 3500;    // keine Nachfrage -> Schema unbekannt
+  var FRIST_GEDULD         = 9000;    // ab hier erklaeren, warum es dauert
+  var FRIST_START          = 45000;   // so lange darf ein Start brauchen
+  var FRIST_FOKUS_WEG      = 12000;   // Fokus so lange weg -> etwas hat uebernommen
+
+  function el(id) { return document.getElementById(id); }
+
+  var knopf           = el('knopf');
+  var lauf            = el('lauf');
+  var laufText        = el('laufText');
+  var hilfe           = el('hilfe');
+  var hilfegrund      = el('hilfegrund');
+  var erfolg          = el('erfolg');
+  var titel           = el('titel');
+  var unterzeile      = el('unterzeile');
+  var nachsatz        = el('nachsatz');
+  var schliessknopf   = el('schliessknopf');
+  var schliesshinweis = el('schliesshinweis');
+
+  // Ist eine Bezugsquelle hinterlegt, tritt der Knopf an die Stelle des allgemeinen
+  // Verweises. Kein download-Attribut: Bei einer fremden Adresse ignorieren Browser
+  // es ohnehin - was den Download ausloest, ist die Adresse selbst ('download=1'
+  // beziehungsweise download.aspx). In einem eigenen Tab, damit eine etwaige
+  // Anmeldung bei SharePoint diese Seite nicht verdraengt.
+  if (DOWNLOAD) {
+    el('bezugknopf').href = DOWNLOAD;
+    el('bezug').hidden = false;
+    el('bezugsquelle').hidden = true;
+  }
+
+  var zustand = 'laeuft';        // laeuft | erfolg | hilfe
+  var nachfrageGesehen = false;  // Hat der Browser ueberhaupt gefragt?
+  var uhren = [];
+
+  // --- Probeansicht ---------------------------------------------------------
+  // Die Anleitung bekommt nur zu Gesicht, wer die Anwendung nicht hat - wer sie
+  // hat, kann also nicht nachsehen, was ein neuer Kollege liest. Mit '?probe=...'
+  // laesst sich jeder Zustand aufrufen, ohne etwas zu starten.
+  //
+  //   ?probe=fehlt   Anleitung zur Einrichtung (mit Knopf zum Herunterladen)
+  //   ?probe=stumm   Anleitung, wenn sich die Anwendung nicht meldet
+  //   ?probe=erfolg  Erfolgsanzeige
+  var probe = '';
+  try {
+    var treffer = /[?&]probe=([a-z]+)/i.exec(window.location.search);
+    if (treffer) { probe = treffer[1].toLowerCase(); }
+  }
+  catch (e) { probe = ''; }
+
+  // --- In SharePoint eingebettet? -------------------------------------------
+  // Aus einem eingebetteten Rahmen heraus laesst sich kein Programm starten; der
+  // Browser unterbindet das. Statt es zu versuchen und stumm zu scheitern, wird
+  // hier gleich der Weg in einen eigenen Tab angeboten.
+  var imRahmen = false;
+  try { imRahmen = (window.self !== window.top); } catch (e) { imRahmen = true; }
+
+  if (imRahmen) {
+    el('rahmenknopf').href = window.location.href;
+    el('rahmenhinweis').hidden = false;
+    lauf.hidden = true;
+    knopf.hidden = true;
+    nachsatz.hidden = true;
+    titel.textContent = 'Auftragsablage starten';
+    unterzeile.textContent = 'Diese Seite muss in einem eigenen Tab geöffnet werden.';
+    return;
+  }
+
+  function merke(uhr) { uhren.push(uhr); return uhr; }
+  function uhrenStoppen() {
+    while (uhren.length) { window.clearTimeout(uhren.pop()); }
+  }
+
+  // --- Erfolg ---------------------------------------------------------------
+  // Ein Browser schliesst per Skript nur Fenster, die er selbst geoeffnet hat oder
+  // die noch keinen eigenen Verlauf angesammelt haben. Das laesst sich vorher
+  // absehen - und einen Knopf anzubieten, der nachweislich nichts tut, ist
+  // schlechter als zu sagen, wie es von Hand geht.
+  function kannSichSchliessen() {
+    try { return history.length <= 1; }
+    catch (e) { return false; }
+  }
+
+  function erfolgAnzeigen() {
+    if (zustand === 'erfolg') { return; }
+    zustand = 'erfolg';
+    uhrenStoppen();
+    lauf.hidden = true;
+    hilfe.hidden = true;
+    knopf.hidden = true;
+    nachsatz.hidden = true;
+    erfolg.hidden = false;
+    titel.textContent = 'Auftragsablage läuft';
+    unterzeile.textContent = 'Die Anwendung hat ein eigenes Fenster geöffnet – ' +
+                             'dieses hier wird nicht mehr gebraucht.';
+
+    var geht = kannSichSchliessen();
+    schliessknopf.hidden = !geht;
+    schliesshinweis.hidden = geht;
+  }
+
+  function schliessen() {
+    erfolgAnzeigen();
+
+    // Der Browser schliesst nur, was er selbst geoeffnet hat oder was noch keinen
+    // eigenen Verlauf angesammelt hat. Klappt es nicht, bleibt die Seite eben
+    // stehen und sagt, dass sie zu kann - deshalb steht erfolgAnzeigen() davor.
+    window.close();
+    window.setTimeout(function () {
+      if (!window.closed) {
+        schliessknopf.hidden = true;
+        schliesshinweis.hidden = false;
+      }
+    }, 500);
+  }
+
+  // --- Fehlschlag -----------------------------------------------------------
+  function hilfeAnzeigen(grund) {
+    if (zustand !== 'laeuft') { return; }
+    zustand = 'hilfe';
+    uhrenStoppen();
+    lauf.hidden = true;
+    nachsatz.hidden = true;
+    erfolg.hidden = true;
+    hilfe.hidden = false;
+    titel.textContent = 'Auftragsablage starten';
+
+    // Die beiden Ursachen brauchen Verschiedenes. Fehlt die Anwendung, gibt es genau
+    // eine Sache zu tun - dann steht auch nur die da. Ist sie vorhanden und meldet
+    // sich bloss nicht, hilft Herunterladen nicht weiter.
+    var fehlt = (grund === 'ohneNachfrage');
+    el('hilfeFehlt').hidden = !fehlt;
+    el('hilfeStumm').hidden = fehlt;
+
+    if (fehlt) {
+      unterzeile.textContent = 'Windows kennt diesen Link auf dem Rechner noch nicht.';
+      hilfegrund.textContent = 'Es kam keine Nachfrage des Browsers. Das spricht dafür, dass die ' +
+                               'Auftragsablage auf diesem Rechner noch nicht eingerichtet ist.';
+    }
+    else {
+      // Nachfrage kam, danach kein Lebenszeichen. Ob abgebrochen oder nur sehr
+      // langsam, laesst sich von hier aus nicht unterscheiden - also wird beides
+      // genannt statt eines geratenen Grundes.
+      unterzeile.textContent = 'Von der Anwendung ist noch nichts zu sehen.';
+      hilfegrund.textContent = 'Der Browser hat nachgefragt – die Auftragsablage hat sich seither ' +
+                               'aber nicht gemeldet. Entweder wurde die Nachfrage nicht bestätigt, ' +
+                               'oder sie öffnet gerade in einem anderen Fenster.';
+    }
+  }
+
+  // Ohne Nachfrage laesst der Browser den Aufruf stillschweigend fallen - dann ist
+  // das Schema unbekannt. Das steht schnell fest, deshalb die kurze Frist. Liegt
+  // der Fokus gerade woanders, wird nicht geurteilt: Dann steht moeglicherweise
+  // gerade die Nachfrage offen.
+  function ohneNachfragePruefen() {
+    if (zustand !== 'laeuft' || nachfrageGesehen) { return; }
+    if (!document.hasFocus() || document.visibilityState === 'hidden') {
+      merke(window.setTimeout(ohneNachfragePruefen, 500));
+      return;
+    }
+    hilfeAnzeigen('ohneNachfrage');
+  }
+
+  // --- Beobachtung ----------------------------------------------------------
+  var uhrFokus = null;
+
+  window.addEventListener('blur', function () {
+    if (zustand !== 'laeuft') { return; }
+
+    // Der Fokus geht weg, waehrend der Tab der angezeigte bleibt: Das ist die
+    // Nachfrage des Browsers - und damit der Beweis, dass Windows das Schema
+    // kennt. Ab jetzt wird geduldig gewartet statt nach drei Sekunden geurteilt.
+    if (document.visibilityState === 'visible') { nachfrageGesehen = true; }
+
+    if (uhrFokus) { window.clearTimeout(uhrFokus); }
+    uhrFokus = window.setTimeout(function () {
+      // So lange am Stueck weg: Etwas anderes hat den Vordergrund uebernommen -
+      // etwa die Anwendung in einem anderen Browser als diesem.
+      if (zustand === 'laeuft' && nachfrageGesehen) { schliessen(); }
+    }, FRIST_FOKUS_WEG);
+  });
+
+  window.addEventListener('focus', function () {
+    // Der Fokus ist zurueck. Das heisst nicht, dass abgebrochen wurde - nach dem
+    // Bestaetigen der Nachfrage kommt er ebenso zurueck, und die Anwendung braucht
+    // danach noch ihre Zeit.
+    if (uhrFokus) { window.clearTimeout(uhrFokus); uhrFokus = null; }
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (zustand !== 'laeuft' || document.visibilityState !== 'hidden') { return; }
+
+    // Ein anderer Tab dieses Fensters ist nach vorn gekommen. Genau das tut die
+    // Auftragsablage am Ende ihres Starts: Sie oeffnet ihre Oberflaeche im
+    // Standardbrowser. Vorausgesetzt, es gab vorher eine Nachfrage - sonst kann es
+    // die Anwendung nicht gewesen sein.
+    if (nachfrageGesehen) { schliessen(); }
+  });
+
+  // --- Anzeige --------------------------------------------------------------
+  // Nur die Anzeige - der Start selbst steht bewusst daneben.
+  function anzeigeZuruecksetzen() {
+    zustand = 'laeuft';
+    nachfrageGesehen = false;
+    uhrenStoppen();
+    if (uhrFokus) { window.clearTimeout(uhrFokus); uhrFokus = null; }
+
+    lauf.hidden = false;
+    hilfe.hidden = true;
+    erfolg.hidden = true;
+    knopf.hidden = false;
+    nachsatz.hidden = false;
+    schliesshinweis.hidden = true;
+    el('probeband').hidden = true;
+    laufText.textContent = 'Start wird ausgelöst …';
+    titel.textContent = 'Auftragsablage wird gestartet …';
+    unterzeile.textContent = 'Ihr Browser fragt gleich, ob er die Anwendung öffnen darf. ' +
+                             'Bitte bestätigen – danach läuft die Auftragsablage in einem eigenen Fenster.';
+
+    merke(window.setTimeout(ohneNachfragePruefen, FRIST_OHNE_NACHFRAGE));
+
+    // Nach dem Bestaetigen passiert eine Weile sichtbar nichts. Ohne ein Wort dazu
+    // wirkt das wie ein Fehlschlag, und der naechste Klick startet alles von vorn.
+    merke(window.setTimeout(function () {
+      if (zustand === 'laeuft' && nachfrageGesehen) {
+        laufText.textContent = 'Die Anwendung wird vorbereitet – das dauert beim ersten Mal etwas.';
+      }
+    }, FRIST_GEDULD));
+
+    merke(window.setTimeout(function () {
+      if (zustand === 'laeuft' && nachfrageGesehen) { hilfeAnzeigen('keinLebenszeichen'); }
+    }, FRIST_START));
+  }
+
+  // Der Knopf ist und bleibt ein gewoehnlicher Hyperlink: Den Start uebernimmt der
+  // Browser selbst, nicht dieses Skript. Kein preventDefault - so oeffnet der Knopf
+  // die Anwendung auch dann noch, wenn hier etwas schiefgeht. Die Behandlung setzt
+  // allein die Anzeige zurueck, damit die Fristen von vorn laufen.
+  knopf.addEventListener('click', function () {
+    anzeigeZuruecksetzen();
+  });
+
+  schliessknopf.addEventListener('click', function () {
+    window.close();
+    // Sollte die Einschaetzung oben doch danebengelegen haben, tritt hier die
+    // Anweisung an die Stelle des Knopfes - statt dass nichts geschieht.
+    window.setTimeout(function () {
+      if (!window.closed) {
+        schliessknopf.hidden = true;
+        schliesshinweis.hidden = false;
+      }
+    }, 500);
+  });
+
+  if (probe) {
+    var band = el('probeband');
+    el('probetext').textContent =
+      probe === 'erfolg' ? 'So sieht es aus, wenn die Anwendung geöffnet hat.'
+                         : 'So sieht die Seite aus, wenn der Start nicht durchkommt.';
+    band.hidden = false;
+
+    if (probe === 'erfolg') { erfolgAnzeigen(); }
+    else if (probe === 'stumm') { hilfeAnzeigen('keinLebenszeichen'); }
+    else { hilfeAnzeigen('ohneNachfrage'); }
+
+    // In den Fehlerbildern bleibt der Startknopf bedienbar - ein Klick startet dann
+    // wirklich. In der Erfolgsanzeige gehoert er nicht hin; dort ist nichts mehr zu
+    // starten, und die echte Seite zeigt ihn dort auch nicht.
+    knopf.hidden = (probe === 'erfolg');
+    return;
+  }
+
+  // Von selbst starten, sobald die Seite steht: Wer auf den Link in SharePoint
+  // geklickt hat, will die Anwendung - kein zweiter Klick noetig.
+  window.setTimeout(function () {
+    anzeigeZuruecksetzen();
+    try { window.location.href = ZIEL; }
+    catch (e) { hilfeAnzeigen('ohneNachfrage'); }
+  }, 250);
+})();
+</script>
+
+</body>
+</html>
